@@ -36,3 +36,4 @@
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/obj/Debug/net9.0/Scraper.pdb
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/obj/Debug/net9.0/Scraper.genruntimeconfig.cache
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/obj/Debug/net9.0/ref/Scraper.dll
+/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/obj/Debug/net9.0/Scraper.sourcelink.json

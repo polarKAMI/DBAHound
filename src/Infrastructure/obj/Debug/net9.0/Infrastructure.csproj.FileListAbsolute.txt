@@ -28,3 +28,4 @@
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/obj/Debug/net9.0/refint/Infrastructure.dll
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/obj/Debug/net9.0/Infrastructure.pdb
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/obj/Debug/net9.0/ref/Infrastructure.dll
+/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/obj/Debug/net9.0/Infrastructure.sourcelink.json

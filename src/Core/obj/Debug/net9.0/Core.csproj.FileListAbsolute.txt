@@ -20,3 +20,4 @@
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/obj/Debug/net9.0/refint/Core.dll
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/obj/Debug/net9.0/Core.pdb
 /Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/obj/Debug/net9.0/ref/Core.dll
+/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/obj/Debug/net9.0/Core.sourcelink.json

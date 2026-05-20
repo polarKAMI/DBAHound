@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Core;
 
 namespace Infrastructure;
@@ -18,7 +19,7 @@ public class JsonWishlistRepository : IWishlistRepository
             return new List<WishlistItem>();
 
         var json = File.ReadAllText(_filePath);
-        return JsonSerializer.Deserialize<List<WishlistItem>>(json) ?? new List<WishlistItem>();
+        return JsonSerializer.Deserialize<List<WishlistItem>>(json, Options) ?? new List<WishlistItem>();
     }
 
     public void Add(WishlistItem item)
@@ -27,7 +28,7 @@ public class JsonWishlistRepository : IWishlistRepository
         
         wishlist.Add(item);
         
-        var json = JsonSerializer.Serialize(wishlist);
+        var json = JsonSerializer.Serialize(wishlist, Options);
         File.WriteAllText(_filePath, json);
     }
     
@@ -37,7 +38,13 @@ public class JsonWishlistRepository : IWishlistRepository
 
         wishlist.RemoveAll(w => w.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
         
-        var json = JsonSerializer.Serialize(wishlist);
+        var json = JsonSerializer.Serialize(wishlist, Options);
         File.WriteAllText(_filePath, json);
     }
+    
+    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+    };
 }

@@ -1,0 +1,24 @@
+@page
+@using Core
+@model Web.Pages.Wishlist
+
+<h1>Wishlist</h1>
+
+<ul>
+    @foreach (var item in Model.WishlistItems)
+    {
+        <li>
+            @item.Title — @item.Platform
+            <form method="post" asp-page-handler="Remove">
+                <input type="hidden" name="title" value="@item.Title" />
+                <button type="submit">Remove</button>
+            </form>
+        </li>
+    }
+</ul>
+
+<form method="post" asp-page-handler="Add">
+    <input type="text" asp-for="NewTitle" placeholder="Game title" />
+    <select asp-for="NewPlatform" asp-items="Html.GetEnumSelectList<Platform>()"></select>
+    <button type="submit">Add</button>
+</form>

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "5vzbfTcsLSc=",
+  "success": true,
+  "projectFilePath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/Console.csproj",
+  "expectedPackageFiles": [
+    "/Users/emilpedersenschmidt/.nuget/packages/htmlagilitypack/1.12.4/htmlagilitypack.1.12.4.nupkg.sha512"
+  ],
+  "logs": []
+}

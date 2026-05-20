@@ -1,0 +1,268 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/Console.csproj": {}
+  },
+  "projects": {
+    "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/Console.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/Console.csproj",
+        "projectName": "Console",
+        "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/Console.csproj",
+        "packagesPath": "/Users/emilpedersenschmidt/.nuget/packages/",
+        "outputPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Console/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/emilpedersenschmidt/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj": {
+                "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj"
+              },
+              "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/Infrastructure.csproj": {
+                "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/Infrastructure.csproj"
+              },
+              "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/Scraper.csproj": {
+                "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/Scraper.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/emilpedersenschmidt/.dotnet/sdk/9.0.310/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj",
+        "projectName": "Core",
+        "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj",
+        "packagesPath": "/Users/emilpedersenschmidt/.nuget/packages/",
+        "outputPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/emilpedersenschmidt/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/emilpedersenschmidt/.dotnet/sdk/9.0.310/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/Infrastructure.csproj",
+        "projectName": "Infrastructure",
+        "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/Infrastructure.csproj",
+        "packagesPath": "/Users/emilpedersenschmidt/.nuget/packages/",
+        "outputPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/emilpedersenschmidt/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj": {
+                "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/emilpedersenschmidt/.dotnet/sdk/9.0.310/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/Scraper.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/Scraper.csproj",
+        "projectName": "Scraper",
+        "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/Scraper.csproj",
+        "packagesPath": "/Users/emilpedersenschmidt/.nuget/packages/",
+        "outputPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Scraper/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/emilpedersenschmidt/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj": {
+                "projectPath": "/Users/emilpedersenschmidt/Documents/Projects/DBAHound/src/Core/Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.12.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/emilpedersenschmidt/.dotnet/sdk/9.0.310/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

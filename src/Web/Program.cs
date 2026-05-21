@@ -1,6 +1,7 @@
 ﻿using Core;
 using Infrastructure;
 using Scraper;
+using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddSingleton<ISeenListingsRepository>(new JsonSeenListingsRepos
 builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
 builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
+builder.Services.AddHostedService<ScrapeScheduler>();
 
 var app = builder.Build();
 

@@ -1,0 +1,80 @@
+using Core;
+using Infrastructure;
+
+namespace Web;
+
+public class ScrapeScheduler : BackgroundService
+{
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<ScrapeScheduler> _logger;
+    private readonly TimeSpan _interval;
+
+    public ScrapeScheduler(IServiceProvider serviceProvider, ILogger<ScrapeScheduler> logger, IConfiguration configuration)
+    {
+        _serviceProvider = serviceProvider;
+        _logger = logger;
+        _interval = TimeSpan.FromHours(configuration.GetValue<double>("Scrape:IntervalHours", 24));
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await RunScrape(stoppingToken);
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            await Task.Delay(_interval, stoppingToken);
+            await RunScrape(stoppingToken);
+        }
+    }
+
+    private async Task RunScrape(CancellationToken stoppingToken)
+    {
+        try
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var wishlistRepository = scope.ServiceProvider.GetRequiredService<IWishlistRepository>();
+            var listingRepository = scope.ServiceProvider.GetRequiredService<IListingRepository>();
+            var matchingService = scope.ServiceProvider.GetRequiredService<IMatchingService>();
+            var matchResultRepository = scope.ServiceProvider.GetRequiredService<IMatchResultRepository>();
+
+            var wishlist = wishlistRepository.GetAll().ToList();
+            if (!wishlist.Any())
+            {
+                _logger.LogInformation("Wishlist is empty, skipping scrape.");
+                return;
+            }
+
+            _logger.LogInformation("Starting scheduled scrape...");
+            var allListings = new List<Listing>();
+
+            foreach (var platform in wishlist.Select(w => w.Platform).Distinct())
+            {
+                if (stoppingToken.IsCancellationRequested) break;
+                var listings = await listingRepository.GetByPlatform(platform);
+                allListings.AddRange(listings);
+            }
+
+            var matches = matchingService.Match(allListings, wishlist);
+            var existing = matchResultRepository.GetAll().Select(m => m.ListingId).ToHashSet();
+
+            var newMatches = matches
+                .Where(m => !existing.Contains(m.Listing.Id))
+                .Select(m => new StoredMatch
+                {
+                    ListingId = m.Listing.Id,
+                    ListingTitle = m.Listing.Title,
+                    WishlistTitle = m.MatchedItem.Title,
+                    Price = m.Listing.Price,
+                    PostalName = m.Listing.PostalName,
+                    FoundAt = DateTime.Now
+                }).ToList();
+
+            matchResultRepository.AddRange(newMatches);
+            _logger.LogInformation("Scrape complete. {Count} new matches found.", newMatches.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Scrape failed.");
+        }
+    }
+}

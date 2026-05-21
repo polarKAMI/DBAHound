@@ -1,31 +1,251 @@
-html {
+:root {
+  --bg:      #0f0e1a;
+  --bg2:     #16142a;
+  --bg3:     #1e1b36;
+  --accent:  #7c6ff7;
+  --accent2: #a89cf7;
+  --border:  rgba(124,111,247,0.18);
+  --border2: rgba(124,111,247,0.32);
+  --text:    #e8e6f8;
+  --text2:   #9e9bbf;
+  --text3:   #6b6890;
+  --green:   #4ade80;
+  --green-bg:rgba(74,222,128,0.12);
+  --danger:  #f87171;
+  --danger-bg:rgba(248,113,113,0.12);
+  --radius:  10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+a { color: inherit; text-decoration: none; }
+
+/* ── Nav ── */
+.topnav {
+  background: var(--bg2);
+  border-bottom: 0.5px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.topnav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.02em;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.logo-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--accent);
 }
 
-body {
-  margin-bottom: 60px;
+.topnav-links {
+  display: flex;
+  gap: 4px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.topnav-link {
+  font-size: 12px;
+  color: var(--text3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background 0.1s, color 0.1s;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.topnav-link:hover { color: var(--text2); }
+.topnav-link.active { color: var(--text); background: var(--bg3); }
+
+/* ── Page body ── */
+.page-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 24px;
+}
+
+/* ── Page header ── */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.page-title { font-size: 15px; font-weight: 500; color: var(--text); }
+.page-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.1s;
+}
+
+.btn:hover { opacity: 0.85; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border: 0.5px solid rgba(248,113,113,0.2); }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+/* ── Match card ── */
+.match-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.match-game { font-size: 13px; font-weight: 500; color: var(--text); }
+.match-listing { font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+.match-meta { display: flex; justify-content: space-between; align-items: center; }
+.match-loc { font-size: 11px; color: var(--text3); }
+.match-link { font-size: 11px; color: var(--accent); }
+
+.price-badge {
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+/* ── Wishlist card ── */
+.wish-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wish-left { display: flex; align-items: center; gap: 10px; }
+.wish-title { font-size: 13px; font-weight: 500; color: var(--text); }
+
+.platform-badge {
+  background: rgba(124,111,247,0.15);
+  color: var(--accent2);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: 16px;
+}
+
+.tab {
+  font-size: 12px;
+  color: var(--text3);
+  padding: 5px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.1s;
+  text-decoration: none;
+}
+
+.tab:hover { color: var(--text2); }
+.tab.active { background: var(--bg3); color: var(--text); border: 0.5px solid var(--border2); }
+
+.tab-count {
+  background: rgba(124,111,247,0.2);
+  color: var(--accent2);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 99px;
+}
+
+/* ── Add form ── */
+.add-form {
+  background: var(--bg2);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-top: 16px;
+}
+
+.add-form-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.form-row { display: flex; gap: 8px; }
+
+input[type="text"], select {
+  background: var(--bg3);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.1s;
+}
+
+input[type="text"] { flex: 1; }
+input[type="text"]::placeholder { color: var(--text3); }
+input[type="text"]:focus, select:focus { border-color: var(--border2); }
+
+/* ── Section label ── */
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+/* ── Empty state ── */
+.empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text3);
+  font-size: 13px;
 }

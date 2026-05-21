@@ -1,19 +1,35 @@
 @page
-@model Web.Pages.Matches
-
+@model Web.Pages.MatchesModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Matches";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="page-header">
+    <div>
+        <div class="page-title">All matches</div>
+        <div class="page-sub">Last scan: @(Model.Matches.Any() ? Model.Matches.Max(m => m.FoundAt).ToString("dd/MM HH:mm") : "never")</div>
+    </div>
 </div>
-</body>
-</html>
+
+@if (!Model.Matches.Any())
+{
+    <div class="empty">No matches yet — run a scrape to start hunting.</div>
+}
+else
+{
+    <div class="section-label">Matches</div>
+    @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
+    {
+        <div class="card">
+            <div class="match-card-top">
+                <div class="match-game">@match.WishlistTitle</div>
+                <div class="price-badge">@match.Price kr</div>
+            </div>
+            <div class="match-listing">@match.ListingTitle</div>
+            <div class="match-meta">
+                <div class="match-loc">@match.PostalName · @match.FoundAt.ToString("dd/MM HH:mm")</div>
+                <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
+            </div>
+        </div>
+    }
+}

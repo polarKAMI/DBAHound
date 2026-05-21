@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Pages;
 
-public class Wishlist : PageModel
+public class WishlistModel : PageModel
 {
     private readonly IWishlistRepository _wishlistRepository;
     
     public List<WishlistItem> WishlistItems { get; set; } = new();
 
-    public Wishlist(IWishlistRepository wishlistRepository)
+    public WishlistModel(IWishlistRepository wishlistRepository)
     {
         _wishlistRepository = wishlistRepository;
     }

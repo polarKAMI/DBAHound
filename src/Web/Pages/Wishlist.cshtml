@@ -1,24 +1,62 @@
 @page
 @using Core
-@model Web.Pages.Wishlist
+@model Web.Pages.WishlistModel
+@{
+    ViewData["Title"] = "Wishlist";
+    var platforms = Model.WishlistItems.Select(w => w.Platform).Distinct().OrderBy(p => p.ToString()).ToList();
+    var currentTab = Request.Query["platform"].ToString();
+    var filtered = string.IsNullOrEmpty(currentTab)
+        ? Model.WishlistItems
+        : Model.WishlistItems.Where(w => w.Platform.ToString() == currentTab);
+}
 
-<h1>Wishlist</h1>
+<div class="page-header">
+    <div>
+        <div class="page-title">Wishlist</div>
+        <div class="page-sub">@Model.WishlistItems.Count items · @platforms.Count platforms</div>
+    </div>
+</div>
 
-<ul>
-    @foreach (var item in Model.WishlistItems)
+<div class="tabs">
+    <a class="tab @(string.IsNullOrEmpty(currentTab) ? "active" : "")"
+       href="/Wishlist">
+        All <span class="tab-count">@Model.WishlistItems.Count</span>
+    </a>
+    @foreach (var platform in platforms)
     {
-        <li>
-            @item.Title — @item.Platform
-            <form method="post" asp-page-handler="Remove">
-                <input type="hidden" name="title" value="@item.Title" />
-                <button type="submit">Remove</button>
-            </form>
-        </li>
+        var count = Model.WishlistItems.Count(w => w.Platform == platform);
+        <a class="tab @(currentTab == platform.ToString() ? "active" : "")"
+           href="/Wishlist?platform=@platform">
+            @platform <span class="tab-count">@count</span>
+        </a>
     }
-</ul>
+</div>
 
-<form method="post" asp-page-handler="Add">
-    <input type="text" asp-for="NewTitle" placeholder="Game title" />
-    <select asp-for="NewPlatform" asp-items="Html.GetEnumSelectList<Platform>()"></select>
-    <button type="submit">Add</button>
-</form>
+<div class="section-label">
+    @(string.IsNullOrEmpty(currentTab) ? "All platforms" : currentTab + " games")
+</div>
+
+@foreach (var item in filtered)
+{
+    <div class="card wish-card">
+        <div class="wish-left">
+            <div class="platform-badge">@item.Platform</div>
+            <div class="wish-title">@item.Title</div>
+        </div>
+        <form method="post" asp-page-handler="Remove">
+            <input type="hidden" name="title" value="@item.Title"/>
+            <button type="submit" class="btn btn-danger">remove</button>
+        </form>
+    </div>
+}
+
+<div class="add-form">
+    <div class="add-form-title">Add to wishlist</div>
+    <form method="post" asp-page-handler="Add">
+        <div class="form-row">
+            <input type="text" asp-for="NewTitle" placeholder="Game title"/>
+            <select asp-for="NewPlatform" asp-items="Html.GetEnumSelectList<Platform>()"></select>
+            <button type="submit" class="btn btn-primary">+ Add</button>
+        </div>
+    </form>
+</div>

@@ -7,11 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// DBAHound services
-var wishlistPath = builder.Configuration["Paths:WishlistFile"] ?? "data/wishlist.json";
-var seenPath = builder.Configuration["Paths:SeenFile"] ?? "data/seen.json";
-var matchesPath = builder.Configuration["Paths:MatchesFile"] ?? "data/matches.json";
+//file paths
+var dataDir = builder.Configuration["Paths:DataDirectory"] 
+              ?? Path.Combine(builder.Environment.ContentRootPath, "data");
 
+Directory.CreateDirectory(dataDir);
+
+var wishlistPath = Path.Combine(dataDir, "wishlist.json");
+var seenPath = Path.Combine(dataDir, "seen.json");
+var matchesPath = Path.Combine(dataDir, "matches.json");
+
+// DBAHound services
 builder.Services.AddSingleton<IWishlistRepository>(new JsonWishlistRepository(wishlistPath));
 builder.Services.AddSingleton<ISeenListingsRepository>(new JsonSeenListingsRepository(seenPath));
 builder.Services.AddSingleton<IMatchingService, MatchingService>();

@@ -27,7 +27,10 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        Matches = _matchResultRepository.GetAll().ToList();
+        Matches = _matchResultRepository.GetAll()
+            .OrderByDescending(m => m.FoundAt)
+            .Take(20)
+            .ToList();
     }
 
     public async Task<IActionResult> OnPostScrape()
@@ -52,9 +55,10 @@ public class IndexModel : PageModel
             PostalName = m.Listing.PostalName,
             FoundAt = DateTime.Now
         }).ToList();
-
-        _matchResultRepository.Clear();
-        _matchResultRepository.AddRange(storedMatches);
+        
+        var existing = _matchResultRepository.GetAll().Select(m => m.ListingId).ToHashSet();
+        var newMatches = storedMatches.Where(m => !existing.Contains(m.ListingId)).ToList();
+        _matchResultRepository.AddRange(newMatches);
 
         return RedirectToPage();
     }

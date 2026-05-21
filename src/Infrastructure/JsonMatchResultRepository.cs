@@ -1,0 +1,38 @@
+using System.Text.Json;
+using Core;
+
+namespace Infrastructure;
+
+public class JsonMatchResultRepository : IMatchResultRepository
+{
+    private readonly string _filePath;
+
+    public JsonMatchResultRepository(string filePath)
+    {
+        _filePath = filePath;
+    }
+    
+    public IEnumerable<StoredMatch> GetAll()
+    {
+        if (!File.Exists(_filePath))
+            return new List<StoredMatch>();
+
+        var json = File.ReadAllText(_filePath);
+        return JsonSerializer.Deserialize<List<StoredMatch>>(json) ?? new List<StoredMatch>();
+    }
+
+    public void AddRange(IEnumerable<StoredMatch> matches)
+    {
+        var storedMatches = GetAll().ToList();
+
+        storedMatches.AddRange(matches);
+
+        var json = JsonSerializer.Serialize(storedMatches);
+        File.WriteAllText(_filePath, json);
+    }
+    
+    public void Clear()
+    {
+        File.WriteAllText(_filePath, JsonSerializer.Serialize(new List<StoredMatch>()));
+    }
+}

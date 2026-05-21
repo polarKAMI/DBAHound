@@ -1,0 +1,43 @@
+﻿@page
+@model Web.Pages.IndexModel
+
+<h1>DBAHound</h1>
+
+<form method="post" asp-page-handler="Scrape">
+    <button type="submit">Run Scrape</button>
+</form>
+
+<h2>Recent Matches</h2>
+
+@if (!Model.Matches.Any())
+{
+    <p>No matches yet — run a scrape to find listings.</p>
+}
+else
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Looking for</th>
+            <th>Listing</th>
+            <th>Price</th>
+            <th>Location</th>
+            <th>Link</th>
+            <th>Found</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var match in Model.Matches)
+        {
+            <tr>
+                <td>@match.WishlistTitle</td>
+                <td>@match.ListingTitle</td>
+                <td>@match.Price kr</td>
+                <td>@match.PostalName</td>
+                <td><a href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">View</a></td>
+                <td>@match.FoundAt.ToString("dd/MM HH:mm")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

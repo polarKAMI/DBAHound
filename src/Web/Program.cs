@@ -10,12 +10,13 @@ builder.Services.AddRazorPages();
 // DBAHound services
 var wishlistPath = builder.Configuration["Paths:WishlistFile"] ?? "data/wishlist.json";
 var seenPath = builder.Configuration["Paths:SeenFile"] ?? "data/seen.json";
+var matchesPath = builder.Configuration["Paths:MatchesFile"] ?? "data/matches.json";
 
 builder.Services.AddSingleton<IWishlistRepository>(new JsonWishlistRepository(wishlistPath));
 builder.Services.AddSingleton<ISeenListingsRepository>(new JsonSeenListingsRepository(seenPath));
 builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
-
+builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
 
 var app = builder.Build();
 

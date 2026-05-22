@@ -21,18 +21,31 @@
 else
 {
     <div class="section-label">Matches</div>
-    @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
-    {
-        <div class="card">
-            <div class="match-card-top">
-                <div class="match-game">@match.WishlistTitle</div>
-                <div class="price-badge">@match.Price kr</div>
+    <div class="matches-panel-wrap">
+    <div class="matches-panel" id="matchesPanel">
+        @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
+        {
+            <div class="card">
+                <div class="match-card-top">
+                    <div class="match-game">@match.WishlistTitle</div>
+                    <div class="price-badge">@match.Price kr</div>
+                </div>
+                <div class="match-listing">@match.ListingTitle</div>
+                <div class="match-meta">
+                    <div class="match-loc">@match.PostalName · @match.ListingDate?.ToString("dd/MM HH:mm")</div>
+                    <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
+                </div>
             </div>
-            <div class="match-listing">@match.ListingTitle</div>
-            <div class="match-meta">
-                <div class="match-loc">@match.PostalName · Listed: @match.ListingDate?.ToString("dd/MM HH:mm")</div>
-                <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
-            </div>
-        </div>
-    }
+        }
+    </div>
+    </div>
+}
+@section Scripts {
+    <script>
+        const panel = document.getElementById('matchesPanel');
+        panel.addEventListener('scroll', () => {
+            const atEnd = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + 8;
+            panel.closest('.matches-panel-wrap').classList.toggle('scrolled-to-end', atEnd);
+        });
+    </script>
 }

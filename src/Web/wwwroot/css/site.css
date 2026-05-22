@@ -249,3 +249,40 @@ input[type="text"]:focus, select:focus { border-color: var(--border2); }
   color: var(--text3);
   font-size: 13px;
 }
+
+.matches-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.matches-panel {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow-y: auto;
+  max-height: 500px;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.matches-panel-wrap {
+  position: relative;
+}
+
+.matches-panel-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(transparent, var(--bg));
+  border-radius: 0 0 var(--radius) var(--radius);
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.matches-panel-wrap.scrolled-to-end::after {
+  opacity: 0;
+}

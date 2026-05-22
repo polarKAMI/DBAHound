@@ -28,6 +28,7 @@ public class IndexModel : PageModel
     public void OnGet()
     {
         Matches = _matchResultRepository.GetAll()
+            .Where(m => !m.IsDismissed)
             .OrderByDescending(m => m.FoundAt)
             .Take(20)
             .ToList();
@@ -61,6 +62,17 @@ public class IndexModel : PageModel
         var newMatches = storedMatches.Where(m => !existing.Contains(m.ListingId)).ToList();
         _matchResultRepository.AddRange(newMatches);
 
+        return RedirectToPage();
+    }
+    public IActionResult OnPostDismiss(int listingId)
+    {
+        _matchResultRepository.Dismiss(listingId);
+        return RedirectToPage();
+    }
+
+    public IActionResult OnPostFavourite(int listingId)
+    {
+        _matchResultRepository.ToggleFavourite(listingId);
         return RedirectToPage();
     }
 }

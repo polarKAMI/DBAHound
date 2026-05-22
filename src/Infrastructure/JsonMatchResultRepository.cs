@@ -35,4 +35,26 @@ public class JsonMatchResultRepository : IMatchResultRepository
     {
         File.WriteAllText(_filePath, JsonSerializer.Serialize(new List<StoredMatch>()));
     }
+    
+    public void Dismiss(int listingId)
+    {
+        var matches = GetAll().ToList();
+        var match = matches.FirstOrDefault(m => m.ListingId == listingId);
+        if (match != null)
+        {
+            match.IsDismissed = true;
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(matches));
+        }
+    }
+
+    public void ToggleFavourite(int listingId)
+    {
+        var matches = GetAll().ToList();
+        var match = matches.FirstOrDefault(m => m.ListingId == listingId);
+        if (match != null)
+        {
+            match.IsFavourite = !match.IsFavourite;
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(matches));
+        }
+    }
 }

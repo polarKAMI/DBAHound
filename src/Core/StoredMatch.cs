@@ -8,6 +8,8 @@ public class StoredMatch
     public decimal Price { get; set; }
     public string? PostalName { get; set; }
     public DateTime FoundAt { get; set; }
-    
     public DateTime? ListingDate { get; set; }
+    public bool IsFavourite { get; set; }
+    public bool IsDismissed { get; set; }
+    
 }

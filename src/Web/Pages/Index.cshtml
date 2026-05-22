@@ -27,13 +27,25 @@ else
         {
             <div class="card">
                 <div class="match-card-top">
-                    <div class="match-game">@match.WishlistTitle</div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="match-game">@match.WishlistTitle</div>
+                        <form method="post" asp-page-handler="Favourite">
+                            <input type="hidden" name="listingId" value="@match.ListingId"/>
+                            <button type="submit" class="btn-icon star @(match.IsFavourite ? "active" : "")" title="Favourite">★</button>
+                        </form>
+                    </div>
                     <div class="price-badge">@match.Price kr</div>
                 </div>
                 <div class="match-listing">@match.ListingTitle</div>
                 <div class="match-meta">
                     <div class="match-loc">@match.PostalName · @match.ListingDate?.ToString("dd/MM HH:mm")</div>
-                    <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <form method="post" asp-page-handler="Dismiss">
+                            <input type="hidden" name="listingId" value="@match.ListingId"/>
+                            <button type="submit" class="btn-icon dismiss" title="Dismiss">×</button>
+                        </form>
+                        <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
+                    </div>
                 </div>
             </div>
         }

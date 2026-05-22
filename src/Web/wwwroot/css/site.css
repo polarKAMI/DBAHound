@@ -286,3 +286,42 @@ input[type="text"]:focus, select:focus { border-color: var(--border2); }
 .matches-panel-wrap.scrolled-to-end::after {
   opacity: 0;
 }
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 4px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+/* Star */
+.btn-icon.star {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(251, 191, 36, 0.5);
+  filter: none;
+}
+
+.btn-icon.star:hover {
+  color: rgba(251, 191, 36, 0.3);
+  -webkit-text-stroke: 1.5px rgba(251, 191, 36, 0.8);
+}
+
+.btn-icon.star.active {
+  color: rgba(251, 191, 36, 0.85);
+  -webkit-text-stroke: 1.5px rgba(251, 191, 36, 0.9);
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
+}
+
+/* Dismiss */
+.btn-icon.dismiss {
+  color: rgba(248, 113, 113, 0.3);
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.btn-icon.dismiss:hover {
+  color: rgba(248, 113, 113, 0.6);
+}

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Core;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Pages;
 
@@ -20,7 +21,20 @@ public class MatchesModel : PageModel
     public void OnGet()
     {
         Matches = _matchResultRepository.GetAll()
+            .Where(m => !m.IsDismissed)
             .OrderByDescending(m => m.FoundAt)
+            .Take(20)
             .ToList();
+    }
+    public IActionResult OnPostDismiss(int listingId)
+    {
+        _matchResultRepository.Dismiss(listingId);
+        return RedirectToPage();
+    }
+
+    public IActionResult OnPostFavourite(int listingId)
+    {
+        _matchResultRepository.ToggleFavourite(listingId);
+        return RedirectToPage();
     }
 }

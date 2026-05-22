@@ -9,8 +9,8 @@
         <div class="page-title">Recent matches</div>
         <div class="page-sub">Last scan: @(Model.Matches.Any() ? Model.Matches.Max(m => m.FoundAt).ToString("dd/MM HH:mm") : "never")</div>
     </div>
-    <form method="post" asp-page-handler="Scrape">
-        <button type="submit" class="btn btn-primary">Run scrape</button>
+    <form method="post" asp-page-handler="Scrape" id="scrapeForm">
+        <button type="submit" class="btn btn-primary" id="scrapeBtn">Run scrape</button>
     </form>
 </div>
 
@@ -68,6 +68,14 @@ else
         panel.addEventListener('scroll', () => {
             const atEnd = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + 8;
             panel.closest('.matches-panel-wrap').classList.toggle('scrolled-to-end', atEnd);
+        });
+    </script>
+    <script>
+        document.getElementById('scrapeForm').addEventListener('submit', function() {
+            const btn = document.getElementById('scrapeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Scraping...';
+            btn.style.opacity = '0.7';
         });
     </script>
 }

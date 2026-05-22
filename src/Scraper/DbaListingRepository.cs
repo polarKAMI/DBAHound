@@ -147,7 +147,6 @@ public class DbaListingRepository : IListingRepository
                        metaProp.TryGetProperty("edited", out var editProp)
             ? editProp.GetString()
             : null;
-        Console.WriteLine($"lastEdit raw value: {lastEdit}");
 
         var postalCode = itemData.TryGetProperty("location", out var locationProp) 
             ? locationProp.GetProperty("postalCode").GetString()

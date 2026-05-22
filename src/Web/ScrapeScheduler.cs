@@ -36,6 +36,7 @@ public class ScrapeScheduler : BackgroundService
             var listingRepository = scope.ServiceProvider.GetRequiredService<IListingRepository>();
             var matchingService = scope.ServiceProvider.GetRequiredService<IMatchingService>();
             var matchResultRepository = scope.ServiceProvider.GetRequiredService<IMatchResultRepository>();
+            var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
 
             var wishlist = wishlistRepository.GetAll().ToList();
             if (!wishlist.Any())
@@ -71,6 +72,11 @@ public class ScrapeScheduler : BackgroundService
                 }).ToList();
 
             matchResultRepository.AddRange(newMatches);
+            if (newMatches.Count > 0)
+            {
+                var summary = string.Join("\n", newMatches.Select(m => $"{m.WishlistTitle} — {m.Price} kr — {m.PostalName}"));
+                await notificationService.SendAsync($"DBAHound — {newMatches.Count} new matches", summary);
+            }
             _logger.LogInformation("Scrape complete. {Count} new matches found.", newMatches.Count);
         }
         catch (Exception ex)

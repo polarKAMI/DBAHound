@@ -2,6 +2,7 @@
 using Infrastructure;
 using Scraper;
 using Web;
+using Web.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,11 @@ builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
 builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
 builder.Services.AddHostedService<ScrapeScheduler>();
+var notificationProvider = builder.Configuration["Notifications:Provider"];
+if (notificationProvider == "Ntfy")
+    builder.Services.AddHttpClient<INotificationService, NtfyNotificationService>();
+else
+    builder.Services.AddHttpClient<INotificationService, PushoverNotificationService>();
 
 var app = builder.Build();
 

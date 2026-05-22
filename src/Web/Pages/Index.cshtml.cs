@@ -53,7 +53,8 @@ public class IndexModel : PageModel
             WishlistTitle = m.MatchedItem.Title,
             Price = m.Listing.Price,
             PostalName = m.Listing.PostalName,
-            FoundAt = DateTime.Now
+            FoundAt = DateTime.Now,
+            ListingDate = m.Listing.LastEdited
         }).ToList();
         
         var existing = _matchResultRepository.GetAll().Select(m => m.ListingId).ToHashSet();

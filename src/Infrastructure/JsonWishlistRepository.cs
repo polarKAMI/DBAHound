@@ -45,6 +45,6 @@ public class JsonWishlistRepository : IWishlistRepository
     private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true,
-        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+        Converters = { new JsonStringEnumConverter() }
     };
 }

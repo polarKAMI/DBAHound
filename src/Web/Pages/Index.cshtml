@@ -30,7 +30,7 @@ else
             </div>
             <div class="match-listing">@match.ListingTitle</div>
             <div class="match-meta">
-                <div class="match-loc">@match.PostalName · @match.FoundAt.ToString("dd/MM HH:mm")</div>
+                <div class="match-loc">@match.PostalName · Listed: @match.ListingDate?.ToString("dd/MM HH:mm")</div>
                 <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
             </div>
         </div>

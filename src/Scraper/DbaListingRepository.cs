@@ -74,7 +74,7 @@ public class DbaListingRepository : IListingRepository
             }
             await Task.Delay(ScrapeDelayMs);
         }
-
+        
         _seenListings.AddRange(newIds);
         return listings;
     }

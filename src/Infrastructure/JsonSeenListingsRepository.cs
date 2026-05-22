@@ -27,4 +27,12 @@ public class JsonSeenListingsRepository : ISeenListingsRepository
         var json = JsonSerializer.Serialize(_seenIds);
         File.WriteAllText(_filePath, json);
     }
+
+    public void CleanUp(int keepCount = 500)
+    {
+        var trimmed = _seenIds.TakeLast(keepCount).ToList();
+        _seenIds.Clear();
+        _seenIds.AddRange(trimmed);
+        File.WriteAllText(_filePath, JsonSerializer.Serialize(_seenIds));
+    }
 }

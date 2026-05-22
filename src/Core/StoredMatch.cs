@@ -11,5 +11,6 @@ public class StoredMatch
     public DateTime? ListingDate { get; set; }
     public bool IsFavourite { get; set; }
     public bool IsDismissed { get; set; }
+    public string? ImageUrl { get; set; }
     
 }

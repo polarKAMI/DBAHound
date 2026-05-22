@@ -55,7 +55,8 @@ public class IndexModel : PageModel
             Price = m.Listing.Price,
             PostalName = m.Listing.PostalName,
             FoundAt = DateTime.Now,
-            ListingDate = m.Listing.LastEdited
+            ListingDate = m.Listing.LastEdited,
+            ImageUrl = m.Listing.ImageUrl
         }).ToList();
         
         var existing = _matchResultRepository.GetAll().Select(m => m.ListingId).ToHashSet();

@@ -69,7 +69,8 @@ public class ScrapeScheduler : BackgroundService
                     Price = m.Listing.Price,
                     PostalName = m.Listing.PostalName,
                     FoundAt = DateTime.Now,
-                    ListingDate = m.Listing.LastEdited
+                    ListingDate = m.Listing.LastEdited,
+                    ImageUrl = m.Listing.ImageUrl
                 }).ToList();
 
             matchResultRepository.AddRange(newMatches);

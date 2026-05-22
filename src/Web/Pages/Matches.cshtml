@@ -2,25 +2,66 @@
 @model Web.Pages.MatchesModel
 @{
     ViewData["Title"] = "Matches";
+    var platforms = Model.Matches.Select(m => m.Platform).Distinct().Where(p => p != null).OrderBy(p => p).ToList();
 }
 
 <div class="page-header">
     <div>
         <div class="page-title">All matches</div>
-        <div class="page-sub">Last scan: @(Model.Matches.Any() ? Model.Matches.Max(m => m.FoundAt).ToString("dd/MM HH:mm") : "never")</div>
+        <div class="page-sub">@Model.TotalCount matches total</div>
+    </div>
+</div>
+
+<div class="matches-toolbar">
+    <div class="tabs">
+        <a class="tab @(Model.Tab == null ? "active" : "")" href="/Matches?sort=@Model.Sort&search=@Model.Search">
+            All <span class="tab-count">@Model.TotalCount</span>
+        </a>
+        <a class="tab @(Model.Tab == "Favourites" ? "active" : "")" href="/Matches?tab=Favourites&sort=@Model.Sort&search=@Model.Search">
+            Favourites
+        </a>
+        @foreach (var platform in platforms)
+        {
+            <a class="tab @(Model.Tab == platform ? "active" : "")" href="/Matches?tab=@platform&sort=@Model.Sort&search=@Model.Search">
+                @platform
+            </a>
+        }
+        <a class="tab @(Model.Tab == "Dismissed" ? "active" : "")" href="/Matches?tab=Dismissed&sort=@Model.Sort&search=@Model.Search">
+            Dismissed
+        </a>
+    </div>
+
+    <div class="matches-controls">
+        <form method="get" style="display:flex; gap:8px;">
+            <input type="hidden" name="tab" value="@Model.Tab"/>
+            <input type="hidden" name="sort" value="@Model.Sort"/>
+            <input type="text" name="search" value="@Model.Search" placeholder="Search matches..." class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+            @if (!string.IsNullOrEmpty(Model.Search))
+            {
+                <a href="/Matches?tab=@Model.Tab&sort=@Model.Sort" class="btn btn-danger">✕</a>
+            }
+        </form>
+
+        <select class="sort-select" onchange="window.location='/Matches?tab=@Model.Tab&search=@Model.Search&sort=' + this.value">
+            @{ var sort = Model.Sort ?? ""; }
+            <option value="" selected="@(sort == "" ? "selected" : null)">Newest first</option>
+            <option value="Oldest" selected="@(sort == "Oldest" ? "selected" : null)">Oldest first</option>
+            <option value="PriceLow" selected="@(sort == "PriceLow" ? "selected" : null)">Price low to high</option>
+            <option value="PriceHigh" selected="@(sort == "PriceHigh" ? "selected" : null)">Price high to low</option>
+        </select>
     </div>
 </div>
 
 @if (!Model.Matches.Any())
 {
-    <div class="empty">No matches yet — run a scrape to start hunting.</div>
+    <div class="empty">No matches found.</div>
 }
 else
 {
-    <div class="section-label">Matches</div>
-    <div class="matches-panel-wrap">
-    <div class="matches-panel">
-        @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
+    <div class="section-label">@(Model.Tab ?? "All") · @Model.Matches.Count shown</div>
+    <div class="matches-panel" style="max-height: 75vh;">
+        @foreach (var match in Model.Matches)
         {
             <div class="card match-card-with-thumb">
                 @if (!string.IsNullOrEmpty(match.ImageUrl))
@@ -56,6 +97,5 @@ else
                 </div>
             </div>
         }
-    </div>
     </div>
 }

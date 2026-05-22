@@ -70,7 +70,8 @@ public class ScrapeScheduler : BackgroundService
                     PostalName = m.Listing.PostalName,
                     FoundAt = DateTime.Now,
                     ListingDate = m.Listing.LastEdited,
-                    ImageUrl = m.Listing.ImageUrl
+                    ImageUrl = m.Listing.ImageUrl,
+                    Platform = m.Listing.Platform.ToString()
                 }).ToList();
 
             matchResultRepository.AddRange(newMatches);

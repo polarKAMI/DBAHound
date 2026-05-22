@@ -12,5 +12,6 @@ public class StoredMatch
     public bool IsFavourite { get; set; }
     public bool IsDismissed { get; set; }
     public string? ImageUrl { get; set; }
+    public string? Platform { get; set; }
     
 }

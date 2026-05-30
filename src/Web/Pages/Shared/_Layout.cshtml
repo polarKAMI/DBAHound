@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -6,11 +7,13 @@
     <title>@ViewData["Title"] - DBAHound</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="icon" type="image/png" href="~/images/logo.png"/>
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken"/>
 </head>
 <body>
+<script src="~/js/site.js" asp-append-version="true"></script>
 <nav class="topnav">
     <a class="topnav-logo" asp-area="" asp-page="/Index">
-        <img src="~/images/logo.png" alt="DBAHound" class="logo-img" />
+        <img src="~/images/logo.png" alt="DBAHound" class="logo-img"/>
         DBAHound
     </a>
     <div class="topnav-links">

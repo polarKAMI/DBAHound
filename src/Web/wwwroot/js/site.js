@@ -1,4 +1,35 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
 
-// Write your JavaScript code.
+    const listingId = btn.dataset.listingId;
+    const action = btn.dataset.action;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    if (action === 'favourite') {
+        fetch('/MatchAction?handler=Favourite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `listingId=${listingId}&__RequestVerificationToken=${token}`
+        })
+            .then(r => r.json())
+            .then(data => {
+                btn.classList.toggle('active', data.isFavourite);
+            });
+    }
+
+    if (action === 'dismiss') {
+        fetch('/MatchAction?handler=Dismiss', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `listingId=${listingId}&__RequestVerificationToken=${token}`
+        })
+            .then(() => {
+                btn.closest('.card').remove();
+            });
+    }
+});

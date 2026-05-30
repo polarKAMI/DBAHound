@@ -2,15 +2,13 @@
 @model Web.Pages.MatchesModel
 @{
     ViewData["Title"] = "Matches";
-    var platforms = Model.Matches.Select(m => m.Platform).Distinct().Where(p => p != null).OrderBy(p => p).ToList();
 }
 
-<div class="page-header">
-    <div>
-        <div class="page-title">All matches</div>
-        <div class="page-sub">@Model.TotalCount matches total</div>
-    </div>
-</div>
+@{
+    ViewData["Title"] = "Matches";
+}
+
+<div class="page-header"></div>
 
 <div class="matches-toolbar">
     <div class="tabs">
@@ -18,14 +16,22 @@
             All <span class="tab-count">@Model.TotalCount</span>
         </a>
         <a class="tab @(Model.Tab == "Favourites" ? "active" : "")" href="/Matches?tab=Favourites&sort=@Model.Sort&search=@Model.Search">
-            Favourites
+            Favourites <span class="tab-count">@Model.FavouriteCount</span>
         </a>
-        @foreach (var platform in platforms)
-        {
-            <a class="tab @(Model.Tab == platform ? "active" : "")" href="/Matches?tab=@platform&sort=@Model.Sort&search=@Model.Search">
-                @platform
-            </a>
-        }
+        <details class="tab-dropdown">
+            <summary class="tab @(Model.PlatformCounts.ContainsKey(Model.Tab ?? "") ? "active" : "")">
+                Platforms ▾
+            </summary>
+            <div class="tab-dropdown-menu">
+                @foreach (var (platform, count) in Model.PlatformCounts.OrderBy(p => p.Key))
+                {
+                    <a class="tab @(Model.Tab == platform ? "active" : "")" 
+                       href="/Matches?tab=@platform&sort=@Model.Sort&search=@Model.Search">
+                        @platform <span class="tab-count">@count</span>
+                    </a>
+                }
+            </div>
+        </details>
         <a class="tab @(Model.Tab == "Dismissed" ? "active" : "")" href="/Matches?tab=Dismissed&sort=@Model.Sort&search=@Model.Search">
             Dismissed
         </a>
@@ -76,10 +82,10 @@ else
                     <div class="match-card-top">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <div class="match-game">@match.WishlistTitle</div>
-                            <form method="post" asp-page-handler="Favourite">
-                                <input type="hidden" name="listingId" value="@match.ListingId"/>
-                                <button type="submit" class="btn-icon star @(match.IsFavourite ? "active" : "")" title="Favourite">★</button>
-                            </form>
+                            <button class="btn-icon star @(match.IsFavourite ? "active" : "")"
+                                    data-listing-id="@match.ListingId"
+                                    data-action="favourite"
+                                    title="Favourite">★</button>
                         </div>
                         <div class="price-badge">@match.Price kr</div>
                     </div>
@@ -87,10 +93,17 @@ else
                     <div class="match-meta">
                         <div class="match-loc">@match.PostalName · @match.ListingDate?.ToString("dd/MM HH:mm")</div>
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <form method="post" asp-page-handler="Dismiss">
-                                <input type="hidden" name="listingId" value="@match.ListingId"/>
-                                <button type="submit" class="btn-icon dismiss" title="Dismiss">×</button>
-                            </form>
+                            <button class="btn-icon dismiss"
+                                    data-listing-id="@match.ListingId"
+                                    data-action="dismiss"
+                                    title="Dismiss">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
+                                    <path d="M10 11v6M14 11v6"></path>
+                                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
+                                </svg>
+                            </button>
                             <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
                         </div>
                     </div>

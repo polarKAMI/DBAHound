@@ -10,6 +10,8 @@ public class MatchesModel : PageModel
 
     public List<StoredMatch> Matches { get; set; } = new();
     public int TotalCount { get; set; }
+    public Dictionary<string, int> PlatformCounts { get; set; } = new();
+    public int FavouriteCount { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public string? Tab { get; set; }
@@ -19,6 +21,7 @@ public class MatchesModel : PageModel
 
     [BindProperty(SupportsGet = true)]
     public string? Sort { get; set; }
+    
 
     public MatchesModel(IMatchResultRepository matchResultRepository)
     {
@@ -29,6 +32,11 @@ public class MatchesModel : PageModel
     {
         var all = _matchResultRepository.GetAll().ToList();
         TotalCount = all.Count(m => !m.IsDismissed);
+        FavouriteCount = all.Count(m => m.IsFavourite && !m.IsDismissed);
+        PlatformCounts = all
+            .Where(m => !m.IsDismissed && m.Platform != null)
+            .GroupBy(m => m.Platform!)
+            .ToDictionary(g => g.Key, g => g.Count());
 
         var query = all.Where(m => !m.IsDismissed).AsEnumerable();
 

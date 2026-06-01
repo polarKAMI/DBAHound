@@ -1,0 +1,52 @@
+@model Core.StoredMatch
+
+<div class="card match-card-with-thumb">
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <img class="match-thumb" src="@Model.ImageUrl" alt="@Model.ListingTitle"/>
+    }
+    else
+    {
+        <div class="match-thumb match-thumb-placeholder"></div>
+    }
+    <div class="match-card-content">
+        <div class="match-card-top">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <div class="match-game">@Model.WishlistTitle</div>
+                <button class="btn-icon star @(Model.IsFavourite ? "active" : "")"
+                        data-listing-id="@Model.ListingId"
+                        data-action="favourite"
+                        title="Favourite">★</button>
+            </div>
+            <div class="price-badge">@Model.Price kr</div>
+        </div>
+        <div class="match-listing">@Model.ListingTitle</div>
+        <div class="match-meta">
+            <div class="match-loc">@Model.PostalName · @Model.ListingDate?.ToString("dd/MM HH:mm")</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                @if (!Model.IsDismissed)
+                {
+                    <button class="btn-icon dismiss"
+                            data-listing-id="@Model.ListingId"
+                            data-action="dismiss"
+                            title="Dismiss">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
+                            <path d="M10 11v6M14 11v6"></path>
+                            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
+                        </svg>
+                    </button>
+                }
+                else
+                {
+                    <button class="btn-icon restore"
+                            data-listing-id="@Model.ListingId"
+                            data-action="restore"
+                            title="Restore">↩</button>
+                }
+                <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@Model.ListingId" target="_blank">view listing →</a>
+            </div>
+        </div>
+    </div>
+</div>

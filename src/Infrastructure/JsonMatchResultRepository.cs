@@ -57,4 +57,15 @@ public class JsonMatchResultRepository : IMatchResultRepository
             File.WriteAllText(_filePath, JsonSerializer.Serialize(matches));
         }
     }
+    
+    public void Restore(int listingId)
+    {
+        var all = GetAll().ToList();
+        var match = all.FirstOrDefault(m => m.ListingId == listingId);
+        if (match != null)
+        {
+            match.IsDismissed = false;
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(all));
+        }
+    }
 }

@@ -468,3 +468,12 @@ input[type="text"]:focus, select:focus { border-color: var(--border2); }
   font-size: 13px;
   margin-bottom: 16px;
 }
+
+.btn-icon.restore {
+  color: rgba(74, 222, 128, 0.4);
+  font-size: 16px;
+}
+
+.btn-icon.restore:hover {
+  color: rgba(74, 222, 128, 0.8);
+}

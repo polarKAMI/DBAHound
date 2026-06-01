@@ -6,14 +6,15 @@ namespace Web;
 public class ScrapeScheduler : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IUserSettingsRepository _settingsRepository;
     private readonly ILogger<ScrapeScheduler> _logger;
     private readonly TimeSpan _interval;
 
-    public ScrapeScheduler(IServiceProvider serviceProvider, ILogger<ScrapeScheduler> logger, IConfiguration configuration)
+    public ScrapeScheduler(IServiceProvider serviceProvider, ILogger<ScrapeScheduler> logger, IUserSettingsRepository settingsRepository)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
-        _interval = TimeSpan.FromHours(configuration.GetValue<double>("Scrape:IntervalHours", 24));
+        _settingsRepository = settingsRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,7 +23,8 @@ public class ScrapeScheduler : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(_interval, stoppingToken);
+            var interval = TimeSpan.FromHours(_settingsRepository.Get().ScrapeIntervalHours);
+            await Task.Delay(interval, stoppingToken);
             await RunScrape(stoppingToken);
         }
     }

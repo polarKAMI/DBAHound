@@ -27,12 +27,25 @@ builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
 builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
 builder.Services.AddHostedService<ScrapeScheduler>();
-builder.Services.AddSingleton<IUserSettingsRepository>(new JsonUserSettingsRepository(settingsPath));
-var notificationProvider = builder.Configuration["Notifications:Provider"];
-if (notificationProvider == "Ntfy")
-    builder.Services.AddHttpClient<INotificationService, NtfyNotificationService>();
-else
-    builder.Services.AddHttpClient<INotificationService, PushoverNotificationService>();
+var settingsRepo = new JsonUserSettingsRepository(settingsPath);
+if (!File.Exists(settingsPath))
+{
+    settingsRepo.Save(new UserSettings { 
+        ScrapeIntervalHours = builder.Configuration.GetValue<int>("Scrape:IntervalHours", 24),
+        NotificationProvider = builder.Configuration["Notifications:Provider"] ?? "None",
+        PushoverToken = builder.Configuration["Notifications:Pushover:Token"] ?? "",
+        PushoverUserKey = builder.Configuration["Notifications:Pushover:UserKey"] ?? "",
+        NtfyUrl = builder.Configuration["Notifications:Ntfy:Url"] ?? "" });
+}
+builder.Services.AddSingleton<IUserSettingsRepository>(settingsRepo);
+
+// Notification services
+builder.Services.AddHttpClient<PushoverNotificationService>();
+builder.Services.AddHttpClient<NtfyNotificationService>();
+builder.Services.AddSingleton<DynamicNotificationService>();
+builder.Services.AddSingleton<INotificationService>(sp => sp.GetRequiredService<DynamicNotificationService>());
+
+builder.Services.AddSingleton<IUserSettingsRepository>(settingsRepo);
 
 var app = builder.Build();
 

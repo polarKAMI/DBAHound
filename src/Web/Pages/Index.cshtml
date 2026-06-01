@@ -22,60 +22,11 @@ else
 {
     <div class="section-label">Matches</div>
     <div class="matches-panel-wrap">
-    <div class="matches-panel" id="matchesPanel">
-        @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
-        {
-            <div class="card match-card-with-thumb">
-                @if (!string.IsNullOrEmpty(match.ImageUrl))
-                {
-                    <img class="match-thumb" src="@match.ImageUrl" alt="@match.ListingTitle"/>
-                }
-                else
-                {
-                    <div class="match-thumb match-thumb-placeholder"></div>
-                }
-                <div class="match-card-content">
-                    <div class="match-card-top">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <div class="match-game">@match.WishlistTitle</div>
-                            <button class="btn-icon star @(match.IsFavourite ? "active" : "")"
-                                    data-listing-id="@match.ListingId"
-                                    data-action="favourite"
-                                    title="Favourite">★</button>
-                        </div>
-                        <div class="price-badge">@match.Price kr</div>
-                    </div>
-                    <div class="match-listing">@match.ListingTitle</div>
-                    <div class="match-meta">
-                        <div class="match-loc">@match.PostalName · @match.ListingDate?.ToString("dd/MM HH:mm")</div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <button class="btn-icon dismiss"
-                                    data-listing-id="@match.ListingId"
-                                    data-action="dismiss"
-                                    title="Dismiss">×</button>
-                            <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+        <div class="matches-panel" id="matchesPanel">
+            @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
+            {
+                await Html.RenderPartialAsync("_MatchCard", match);
+            }
+        </div>
     </div>
-    </div>
-}
-@section Scripts {
-    <script>
-        const panel = document.getElementById('matchesPanel');
-        panel.addEventListener('scroll', () => {
-            const atEnd = panel.scrollHeight - panel.scrollTop <= panel.clientHeight + 8;
-            panel.closest('.matches-panel-wrap').classList.toggle('scrolled-to-end', atEnd);
-        });
-    </script>
-    <script>
-        document.getElementById('scrapeForm').addEventListener('submit', function() {
-            const btn = document.getElementById('scrapeBtn');
-            btn.disabled = true;
-            btn.textContent = 'Scraping...';
-            btn.style.opacity = '0.7';
-        });
-    </script>
 }

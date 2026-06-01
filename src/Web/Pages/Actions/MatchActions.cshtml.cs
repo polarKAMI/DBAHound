@@ -3,12 +3,11 @@
     using Core;
 
     namespace Web.Pages;
-
-    public class MatchActionModel : PageModel
+    public class MatchActionsModel : PageModel
     {
         private readonly IMatchResultRepository _matchResultRepository;
 
-        public MatchActionModel(IMatchResultRepository matchResultRepository)
+        public MatchActionsModel(IMatchResultRepository matchResultRepository)
         {
             _matchResultRepository = matchResultRepository;
         }
@@ -24,6 +23,12 @@
         public IActionResult OnPostDismiss(int listingId)
         {
             _matchResultRepository.Dismiss(listingId);
+            return new JsonResult(new { success = true });
+        }
+        
+        public IActionResult OnPostRestore(int listingId)
+        {
+            _matchResultRepository.Restore(listingId);
             return new JsonResult(new { success = true });
         }
     }

@@ -16,7 +16,7 @@
             All <span class="tab-count">@Model.TotalCount</span>
         </a>
         <a class="tab @(Model.Tab == "Favourites" ? "active" : "")" href="/Matches?tab=Favourites&sort=@Model.Sort&search=@Model.Search">
-            Favourites <span class="tab-count">@Model.FavouriteCount</span>
+            Favourites <span class="tab-count favourite-count">@Model.FavouriteCount</span>
         </a>
         <details class="tab-dropdown">
             <summary class="tab @(Model.PlatformCounts.ContainsKey(Model.Tab ?? "") ? "active" : "")">
@@ -69,46 +69,7 @@ else
     <div class="matches-panel" style="max-height: 75vh;">
         @foreach (var match in Model.Matches)
         {
-            <div class="card match-card-with-thumb">
-                @if (!string.IsNullOrEmpty(match.ImageUrl))
-                {
-                    <img class="match-thumb" src="@match.ImageUrl" alt="@match.ListingTitle"/>
-                }
-                else
-                {
-                    <div class="match-thumb match-thumb-placeholder"></div>
-                }
-                <div class="match-card-content">
-                    <div class="match-card-top">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <div class="match-game">@match.WishlistTitle</div>
-                            <button class="btn-icon star @(match.IsFavourite ? "active" : "")"
-                                    data-listing-id="@match.ListingId"
-                                    data-action="favourite"
-                                    title="Favourite">★</button>
-                        </div>
-                        <div class="price-badge">@match.Price kr</div>
-                    </div>
-                    <div class="match-listing">@match.ListingTitle</div>
-                    <div class="match-meta">
-                        <div class="match-loc">@match.PostalName · @match.ListingDate?.ToString("dd/MM HH:mm")</div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <button class="btn-icon dismiss"
-                                    data-listing-id="@match.ListingId"
-                                    data-action="dismiss"
-                                    title="Dismiss">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
-                                    <path d="M10 11v6M14 11v6"></path>
-                                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
-                                </svg>
-                            </button>
-                            <a class="match-link" href="https://www.dba.dk/recommerce/forsale/item/@match.ListingId" target="_blank">view listing →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            await Html.RenderPartialAsync("_MatchCard", match);
         }
     </div>
 }

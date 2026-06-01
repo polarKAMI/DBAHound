@@ -7,5 +7,6 @@ public interface IMatchResultRepository
     void Clear();
     void Dismiss(int listingId);
     void ToggleFavourite(int listingId);
+    void Restore(int  listingId);
 
 }

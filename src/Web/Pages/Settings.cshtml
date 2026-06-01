@@ -1,0 +1,99 @@
+@page
+@model Web.Pages.SettingsModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Settings</div>
+        <div class="page-sub">Configure DBAHound behaviour</div>
+    </div>
+</div>
+
+@if (Model.SuccessMessage != null)
+{
+    <div class="success-banner">@Model.SuccessMessage</div>
+}
+
+<form method="post" asp-page-handler="Save">
+    <div class="settings-section">
+        <div class="settings-section-title">Scraping</div>
+
+        <div class="settings-row">
+            <label class="settings-label">Scrape interval (hours)</label>
+            <input type="number" asp-for="Settings.ScrapeIntervalHours" class="settings-input" min="1" max="168"/>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="settings-section-title">Notifications</div>
+
+        <div class="settings-row">
+            <label class="settings-label">Provider</label>
+            <select asp-for="Settings.NotificationProvider" class="sort-select">
+                <option value="None">None</option>
+                <option value="Pushover">Pushover</option>
+                <option value="Ntfy">ntfy</option>
+            </select>
+        </div>
+
+        <div class="settings-row pushover-field">
+            <label class="settings-label">Pushover token</label>
+            <input type="text" asp-for="Settings.PushoverToken" class="settings-input" placeholder="Your Pushover token"/>
+        </div>
+
+        <div class="settings-row pushover-field">
+            <label class="settings-label">Pushover user key</label>
+            <input type="text" asp-for="Settings.PushoverUserKey" class="settings-input" placeholder="Your Pushover user key"/>
+        </div>
+
+        <div class="settings-row ntfy-field">
+            <label class="settings-label">ntfy URL</label>
+            <input type="text" asp-for="Settings.NtfyUrl" class="settings-input" placeholder="http://ntfy:5555/dbahound"/>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save settings</button>
+</form>
+
+<div class="settings-section" style="margin-top: 24px;">
+    <div class="settings-section-title">Maintenance</div>
+
+    <div class="settings-row">
+        <div>
+            <div class="settings-label">Clear seen listings</div>
+            <div class="settings-hint">Next scrape will reprocess all listings from scratch</div>
+        </div>
+        <form method="post" asp-page-handler="ClearSeen">
+            <button type="submit" class="btn btn-danger">Clear</button>
+        </form>
+    </div>
+
+    <div class="settings-row">
+        <div>
+            <div class="settings-label">Clear dismissed matches</div>
+            <div class="settings-hint">Restores all dismissed matches to the main list</div>
+        </div>
+        <form method="post" asp-page-handler="ClearDismissed">
+            <button type="submit" class="btn btn-danger">Clear</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    const provider = document.querySelector('[name="Settings.NotificationProvider"]');
+    const pushoverFields = document.querySelectorAll('.pushover-field');
+    const ntfyFields = document.querySelectorAll('.ntfy-field');
+
+    function updateFields() {
+        const val = provider.value;
+        pushoverFields.forEach(f => f.style.display = val === 'Pushover' ? 'flex' : 'none');
+        ntfyFields.forEach(f => f.style.display = val === 'Ntfy' ? 'flex' : 'none');
+    }
+
+    provider.addEventListener('change', updateFields);
+    updateFields();
+</script>
+}

@@ -18,6 +18,7 @@ Directory.CreateDirectory(dataDir);
 var wishlistPath = Path.Combine(dataDir, "wishlist.json");
 var seenPath = Path.Combine(dataDir, "seen.json");
 var matchesPath = Path.Combine(dataDir, "matches.json");
+var settingsPath = Path.Combine(dataDir, "settings.json");
 
 // DBAHound services
 builder.Services.AddSingleton<IWishlistRepository>(new JsonWishlistRepository(wishlistPath));
@@ -26,6 +27,7 @@ builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
 builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
 builder.Services.AddHostedService<ScrapeScheduler>();
+builder.Services.AddSingleton<IUserSettingsRepository>(new JsonUserSettingsRepository(settingsPath));
 var notificationProvider = builder.Configuration["Notifications:Provider"];
 if (notificationProvider == "Ntfy")
     builder.Services.AddHttpClient<INotificationService, NtfyNotificationService>();

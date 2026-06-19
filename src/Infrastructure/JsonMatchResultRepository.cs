@@ -68,4 +68,15 @@ public class JsonMatchResultRepository : IMatchResultRepository
             File.WriteAllText(_filePath, JsonSerializer.Serialize(all));
         }
     }
+    
+    public void Cleanup(int keepDays)
+    {
+        var all = GetAll().ToList();
+        var cutoff = DateTime.Now.AddDays(-keepDays);
+        var cleaned = all.Where(m => 
+            m.IsFavourite || 
+            m.IsDismissed || 
+            m.FoundAt >= cutoff).ToList();
+        File.WriteAllText(_filePath, JsonSerializer.Serialize(cleaned));
+    }
 }

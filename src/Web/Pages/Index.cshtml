@@ -23,9 +23,13 @@ else
     <div class="section-label">Matches</div>
     <div class="matches-panel-wrap">
         <div class="matches-panel" id="matchesPanel">
-            @foreach (var match in Model.Matches.OrderByDescending(m => m.FoundAt))
+            @foreach (var match in Model.Matches)
             {
-                await Html.RenderPartialAsync("_MatchCard", match);
+                await Html.RenderPartialAsync("_MatchCard", match, new ViewDataDictionary(ViewData)
+                {
+                    { "AutoCleanupEnabled", Model.AutoCleanupEnabled },
+                    { "AutoCleanupDays", Model.AutoCleanupDays }
+                });
             }
         </div>
     </div>

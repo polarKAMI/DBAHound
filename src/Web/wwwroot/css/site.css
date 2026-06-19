@@ -477,3 +477,15 @@ input[type="text"]:focus, select:focus { border-color: var(--border2); }
 .btn-icon.restore:hover {
   color: rgba(74, 222, 128, 0.8);
 }
+
+.expiry {
+  color: var(--text3);
+}
+
+.expiry-warning {
+  color: #f59e0b;
+}
+
+.expiry-urgent {
+  color: var(--danger);
+}

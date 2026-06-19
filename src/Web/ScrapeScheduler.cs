@@ -16,6 +16,36 @@ public class ScrapeScheduler : BackgroundService
         _logger = logger;
         _settingsRepository = settingsRepository;
     }
+    
+    private TimeSpan GetDelayUntilNextRun(UserSettings settings)
+    {
+        var now = DateTime.Now;
+
+        return settings.ScheduleMode switch
+        {
+            "Daily" => GetDelayUntilTime(now, settings.ScrapeTimeHour, settings.ScrapeTimeMinute),
+            "Weekly" => GetDelayUntilDayAndTime(now, settings.ScrapeDay, settings.ScrapeTimeHour, settings.ScrapeTimeMinute),
+            _ => TimeSpan.FromHours(settings.ScrapeIntervalHours)
+        };
+    }
+
+    private TimeSpan GetDelayUntilTime(DateTime now, int hour, int minute)
+    {
+        var next = now.Date.AddHours(hour).AddMinutes(minute);
+        if (next <= now)
+            next = next.AddDays(1);
+        return next - now;
+    }
+
+    private TimeSpan GetDelayUntilDayAndTime(DateTime now, DayOfWeek day, int hour, int minute)
+    {
+        var next = now.Date.AddHours(hour).AddMinutes(minute);
+        int daysUntil = ((int)day - (int)now.DayOfWeek + 7) % 7;
+        if (daysUntil == 0 && next <= now)
+            daysUntil = 7;
+        next = next.AddDays(daysUntil);
+        return next - now;
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -23,8 +53,10 @@ public class ScrapeScheduler : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            var interval = TimeSpan.FromHours(_settingsRepository.Get().ScrapeIntervalHours);
-            await Task.Delay(interval, stoppingToken);
+            var settings = _settingsRepository.Get();
+            var delay = GetDelayUntilNextRun(settings);
+            _logger.LogInformation("Next scrape in {delay}", delay);
+            await Task.Delay(delay, stoppingToken);
             await RunScrape(stoppingToken);
         }
     }
@@ -78,6 +110,12 @@ public class ScrapeScheduler : BackgroundService
 
             matchResultRepository.AddRange(newMatches);
             seenListingsRepository.CleanUp();
+            seenListingsRepository.CleanUp();
+
+            var currentSettings = _settingsRepository.Get();
+            if (currentSettings.AutoCleanupEnabled)
+                matchResultRepository.Cleanup(currentSettings.AutoCleanupDays);
+            
             if (newMatches.Count > 0)
             {
                 var summary = string.Join("\n", newMatches.Select(m => $"{m.WishlistTitle} — {m.Price} kr — {m.PostalName}"));

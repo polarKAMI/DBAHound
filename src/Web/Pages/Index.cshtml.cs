@@ -10,23 +10,32 @@ public class IndexModel : PageModel
     private readonly IListingRepository _listingRepository;
     private readonly IWishlistRepository _wishlistRepository;
     private readonly IMatchingService _matchingService;
+    private readonly IUserSettingsRepository _settingsRepository;
 
     public List<StoredMatch> Matches { get; set; } = new();
+    
+    public bool AutoCleanupEnabled { get; set; }
+    public int AutoCleanupDays { get; set; }
 
     public IndexModel(
         IMatchResultRepository matchResultRepository,
         IListingRepository listingRepository,
         IWishlistRepository wishlistRepository,
-        IMatchingService matchingService)
+        IMatchingService matchingService,
+        IUserSettingsRepository  settingsRepository)
     {
         _matchResultRepository = matchResultRepository;
         _listingRepository = listingRepository;
         _wishlistRepository = wishlistRepository;
         _matchingService = matchingService;
+        _settingsRepository = settingsRepository;
     }
 
     public void OnGet()
     {
+        var settings = _settingsRepository.Get();
+        AutoCleanupEnabled = settings.AutoCleanupEnabled;
+        AutoCleanupDays = settings.AutoCleanupDays;
         Matches = _matchResultRepository.GetAll()
             .Where(m => !m.IsDismissed)
             .OrderByDescending(m => m.FoundAt)

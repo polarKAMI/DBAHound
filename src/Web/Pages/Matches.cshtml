@@ -69,7 +69,11 @@ else
     <div class="matches-panel" style="max-height: 75vh;">
         @foreach (var match in Model.Matches)
         {
-            await Html.RenderPartialAsync("_MatchCard", match);
+            await Html.RenderPartialAsync("_MatchCard", match, new ViewDataDictionary(ViewData)
+            {
+                { "AutoCleanupEnabled", Model.AutoCleanupEnabled },
+                { "AutoCleanupDays", Model.AutoCleanupDays }
+            });
         }
     </div>
 }

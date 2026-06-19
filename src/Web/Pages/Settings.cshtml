@@ -16,13 +16,43 @@
     <div class="success-banner">@Model.SuccessMessage</div>
 }
 
-<form method="post" asp-page-handler="Save">
-    <div class="settings-section">
+<div class="settings-section">
         <div class="settings-section-title">Scraping</div>
 
         <div class="settings-row">
-            <label class="settings-label">Scrape interval (hours)</label>
+            <label class="settings-label">Schedule mode</label>
+            <select asp-for="Settings.ScheduleMode" class="sort-select" id="scheduleMode">
+                <option value="Hourly">Hourly</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+            </select>
+        </div>
+
+        <div class="settings-row hourly-field">
+            <label class="settings-label">Interval (hours)</label>
             <input type="number" asp-for="Settings.ScrapeIntervalHours" class="settings-input" min="1" max="168"/>
+        </div>
+
+        <div class="settings-row time-field">
+            <label class="settings-label">Time of day</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <input type="number" asp-for="Settings.ScrapeTimeHour" class="settings-input" style="width:80px;" min="0" max="23" placeholder="HH"/>
+                <span style="color:var(--text2)">:</span>
+                <input type="number" asp-for="Settings.ScrapeTimeMinute" class="settings-input" style="width:80px;" min="0" max="59" placeholder="MM"/>
+            </div>
+        </div>
+
+        <div class="settings-row weekly-field">
+            <label class="settings-label">Day of week</label>
+            <select asp-for="Settings.ScrapeDay" class="sort-select">
+                <option value="0">Sunday</option>
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+            </select>
         </div>
     </div>
 
@@ -54,8 +84,21 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save settings</button>
-</form>
+<div class="settings-section">
+    <div class="settings-section-title">Cleanup</div>
+
+    <div class="settings-row">
+        <label class="settings-label">Auto cleanup matches</label>
+        <input type="checkbox" asp-for="Settings.AutoCleanupEnabled" id="autoCleanup"/>
+    </div>
+
+    <div class="settings-row cleanup-field">
+        <label class="settings-label">Keep matches for (days)</label>
+        <input type="number" asp-for="Settings.AutoCleanupDays" class="settings-input" min="1" max="365"/>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" id="saveSettingsBtn">Save settings</button>
 
 <div class="settings-section" style="margin-top: 24px;">
     <div class="settings-section-title">Maintenance</div>
@@ -95,5 +138,70 @@
 
     provider.addEventListener('change', updateFields);
     updateFields();
+
+    const scheduleMode = document.getElementById('scheduleMode');
+    const hourlyFields = document.querySelectorAll('.hourly-field');
+    const timeFields = document.querySelectorAll('.time-field');
+    const weeklyFields = document.querySelectorAll('.weekly-field');
+
+    function updateScheduleFields() {
+        const val = scheduleMode.value;
+        hourlyFields.forEach(f => f.style.display = val === 'Hourly' ? 'flex' : 'none');
+        timeFields.forEach(f => f.style.display = val !== 'Hourly' ? 'flex' : 'none');
+        weeklyFields.forEach(f => f.style.display = val === 'Weekly' ? 'flex' : 'none');
+    }
+
+    scheduleMode.addEventListener('change', updateScheduleFields);
+    updateScheduleFields();
+
+    document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+        const settings = {
+            scheduleMode: document.querySelector('[name="Settings.ScheduleMode"]').value,
+            scrapeIntervalHours: parseInt(document.querySelector('[name="Settings.ScrapeIntervalHours"]').value),
+            scrapeTimeHour: parseInt(document.querySelector('[name="Settings.ScrapeTimeHour"]').value),
+            scrapeTimeMinute: parseInt(document.querySelector('[name="Settings.ScrapeTimeMinute"]').value),
+            scrapeDay: parseInt(document.querySelector('[name="Settings.ScrapeDay"]').value),
+            autoCleanupEnabled: document.querySelector('[name="Settings.AutoCleanupEnabled"]')?.checked ?? false,
+            autoCleanupDays: parseInt(document.querySelector('[name="Settings.AutoCleanupDays"]')?.value ?? 30),
+            notificationProvider: document.querySelector('[name="Settings.NotificationProvider"]').value,
+            pushoverToken: document.querySelector('[name="Settings.PushoverToken"]').value,
+            pushoverUserKey: document.querySelector('[name="Settings.PushoverUserKey"]').value,
+            ntfyUrl: document.querySelector('[name="Settings.NtfyUrl"]').value
+        };
+
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/Actions/SettingsActions?handler=Save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify(settings)
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    const btn = document.getElementById('saveSettingsBtn');
+                    const original = btn.textContent;
+                    btn.textContent = 'Saved ✓';
+                    btn.style.background = 'var(--green)';
+                    setTimeout(() => {
+                        btn.textContent = original;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            });
+        
+        const autoCleanup = document.getElementById('autoCleanup');
+        const cleanupFields = document.querySelectorAll('.cleanup-field');
+
+        function updateCleanupFields() {
+            cleanupFields.forEach(f => f.style.display = autoCleanup.checked ? 'flex' : 'none');
+        }
+
+        autoCleanup.addEventListener('change', updateCleanupFields);
+        updateCleanupFields();
+    });
 </script>
 }

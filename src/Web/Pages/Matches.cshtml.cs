@@ -7,6 +7,9 @@ namespace Web.Pages;
 public class MatchesModel : PageModel
 {
     private readonly IMatchResultRepository _matchResultRepository;
+    private readonly IUserSettingsRepository _settingsRepository;
+    public bool AutoCleanupEnabled { get; set; }
+    public int AutoCleanupDays { get; set; }
 
     public List<StoredMatch> Matches { get; set; } = new();
     public int TotalCount { get; set; }
@@ -23,13 +26,18 @@ public class MatchesModel : PageModel
     public string? Sort { get; set; }
     
 
-    public MatchesModel(IMatchResultRepository matchResultRepository)
+    public MatchesModel(IMatchResultRepository matchResultRepository, IUserSettingsRepository settingsRepository)
     {
         _matchResultRepository = matchResultRepository;
+        _settingsRepository = settingsRepository;
     }
 
     public void OnGet()
     {
+        var settings = _settingsRepository.Get();
+        AutoCleanupEnabled = settings.AutoCleanupEnabled;
+        AutoCleanupDays = settings.AutoCleanupDays;
+        
         var all = _matchResultRepository.GetAll().ToList();
         TotalCount = all.Count(m => !m.IsDismissed);
         FavouriteCount = all.Count(m => m.IsFavourite && !m.IsDismissed);

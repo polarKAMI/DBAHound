@@ -8,5 +8,6 @@ public interface IMatchResultRepository
     void Dismiss(int listingId);
     void ToggleFavourite(int listingId);
     void Restore(int  listingId);
+    void Cleanup(int keepDays);
 
 }

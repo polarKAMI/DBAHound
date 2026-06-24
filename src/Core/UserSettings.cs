@@ -8,6 +8,7 @@ public class UserSettings
     public int ScrapeTimeHour { get; set; } = 8;
     public int ScrapeTimeMinute { get; set; } = 0;
     public DayOfWeek ScrapeDay { get; set; } = DayOfWeek.Monday;
+    public int StatusCheckIntervalHours { get; set; } = 6;
     
     //Cleanup settings
     public bool AutoCleanupEnabled { get; set; } = false;

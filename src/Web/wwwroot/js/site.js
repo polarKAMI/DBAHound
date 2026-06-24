@@ -87,3 +87,92 @@ if (panel) {
         panel.closest('.matches-panel-wrap').classList.toggle('scrolled-to-end', atEnd);
     });
 }
+
+const addBtn = document.getElementById('addWishlistBtn');
+if (addBtn) {
+    addBtn.addEventListener('click', function() {
+        const title = document.getElementById('newTitle').value.trim();
+        const platform = document.getElementById('newPlatform').value;
+        if (!title) return;
+
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/Actions/WishlistActions?handler=Add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `title=${encodeURIComponent(title)}&platform=${platform}&__RequestVerificationToken=${token}`
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Add card to the list visually
+                    const list = document.querySelector('.matches-panel') ?? document.querySelector('.wishlist-list');
+                    document.getElementById('newTitle').value = '';
+                    // Reload to show new item with proper tab counts
+                    window.location.reload();
+                }
+            });
+    });
+
+    const addBtn = document.getElementById('addWishlistBtn');
+    if (addBtn) {
+        addBtn.addEventListener('click', function() {
+            const title = document.getElementById('newTitle').value.trim();
+            const platform = document.getElementById('newPlatform').value;
+            if (!title) return;
+
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch('/Actions/WishlistActions?handler=Add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `title=${encodeURIComponent(title)}&platform=${platform}&__RequestVerificationToken=${token}`
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('newTitle').value = '';
+                        window.location.reload();
+                    }
+                });
+        });
+    }
+}
+
+const checkStatusBtn = document.getElementById('checkStatusBtn');
+if (checkStatusBtn) {
+    checkStatusBtn.addEventListener('click', function() {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        checkStatusBtn.disabled = true;
+        checkStatusBtn.textContent = 'Checking...';
+        checkStatusBtn.style.opacity = '0.7';
+
+        fetch('/Actions/MatchActions?handler=CheckStatus', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `__RequestVerificationToken=${token}`
+        })
+            .then(r => r.json())
+            .then(data => {
+                data.matches.forEach(m => {
+                    const card = document.querySelector(`[data-listing-id="${m.listingId}"]`)?.closest('.card');
+                    if (!card) return;
+                    const badge = card.querySelector('.price-badge, .price-badge-sold, .price-badge-removed');
+                    if (!badge) return;
+
+                    if (m.status === 'Sold') {
+                        badge.className = 'price-badge price-badge-sold';
+                        badge.textContent = 'SOLD';
+                    } else if (m.status === 'Removed') {
+                        badge.className = 'price-badge price-badge-removed';
+                        badge.textContent = 'REMOVED';
+                    }
+                });
+
+                checkStatusBtn.disabled = false;
+                checkStatusBtn.textContent = 'Check status';
+                checkStatusBtn.style.opacity = '';
+            });
+    });
+}
+

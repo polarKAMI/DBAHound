@@ -4,10 +4,6 @@
     ViewData["Title"] = "Matches";
 }
 
-@{
-    ViewData["Title"] = "Matches";
-}
-
 <div class="page-header"></div>
 
 <div class="matches-toolbar">
@@ -25,7 +21,7 @@
             <div class="tab-dropdown-menu">
                 @foreach (var (platform, count) in Model.PlatformCounts.OrderBy(p => p.Key))
                 {
-                    <a class="tab @(Model.Tab == platform ? "active" : "")" 
+                    <a class="tab @(Model.Tab == platform ? "active" : "")"
                        href="/Matches?tab=@platform&sort=@Model.Sort&search=@Model.Search">
                         @platform <span class="tab-count">@count</span>
                     </a>
@@ -49,13 +45,16 @@
             }
         </form>
 
-        <select class="sort-select" onchange="window.location='/Matches?tab=@Model.Tab&search=@Model.Search&sort=' + this.value">
-            @{ var sort = Model.Sort ?? ""; }
-            <option value="" selected="@(sort == "" ? "selected" : null)">Newest first</option>
-            <option value="Oldest" selected="@(sort == "Oldest" ? "selected" : null)">Oldest first</option>
-            <option value="PriceLow" selected="@(sort == "PriceLow" ? "selected" : null)">Price low to high</option>
-            <option value="PriceHigh" selected="@(sort == "PriceHigh" ? "selected" : null)">Price high to low</option>
-        </select>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <select class="sort-select" onchange="window.location='/Matches?tab=@Model.Tab&search=@Model.Search&sort=' + this.value">
+                @{ var sort = Model.Sort ?? ""; }
+                <option value="" selected="@(sort == "" ? "selected" : null)">Newest first</option>
+                <option value="Oldest" selected="@(sort == "Oldest" ? "selected" : null)">Oldest first</option>
+                <option value="PriceLow" selected="@(sort == "PriceLow" ? "selected" : null)">Price low to high</option>
+                <option value="PriceHigh" selected="@(sort == "PriceHigh" ? "selected" : null)">Price high to low</option>
+            </select>
+            <button type="button" class="btn btn-secondary" id="checkStatusBtn">Check status</button>
+        </div>
     </div>
 </div>
 

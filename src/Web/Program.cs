@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IMatchingService, MatchingService>();
 builder.Services.AddHttpClient<IListingRepository, DbaListingRepository>();
 builder.Services.AddSingleton<IMatchResultRepository>(new JsonMatchResultRepository(matchesPath));
 builder.Services.AddHostedService<ScrapeScheduler>();
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 var settingsRepo = new JsonUserSettingsRepository(settingsPath);
 if (!File.Exists(settingsPath))
 {
@@ -38,6 +39,9 @@ if (!File.Exists(settingsPath))
         NtfyUrl = builder.Configuration["Notifications:Ntfy:Url"] ?? "" });
 }
 builder.Services.AddSingleton<IUserSettingsRepository>(settingsRepo);
+
+builder.Services.AddSingleton<IStatusCheckService, StatusCheckService>();
+builder.Services.AddHostedService<StatusCheckScheduler>();
 
 // Notification services
 builder.Services.AddHttpClient<PushoverNotificationService>();

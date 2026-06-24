@@ -39,7 +39,7 @@ public class SettingsModel : PageModel
 
     public IActionResult OnPostClearSeen()
     {
-        _seenListingsRepository.CleanUp(0);
+        _seenListingsRepository.CleanUpAll(0);
         SuccessMessage = "Seen listings cleared.";
         return Page();
     }

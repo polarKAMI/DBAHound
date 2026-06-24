@@ -18,8 +18,7 @@
 </div>
 
 <div class="tabs">
-    <a class="tab @(string.IsNullOrEmpty(currentTab) ? "active" : "")"
-       href="/Wishlist">
+    <a class="tab @(string.IsNullOrEmpty(currentTab) ? "active" : "")" href="/Wishlist">
         All <span class="tab-count">@Model.WishlistItems.Count</span>
     </a>
     @foreach (var platform in platforms)
@@ -43,30 +42,30 @@
             <div class="platform-badge">@item.Platform</div>
             <div class="wish-title">@item.Title</div>
         </div>
-        <form method="post" asp-page-handler="Remove">
-            <input type="hidden" name="title" value="@item.Title"/>
-            <button class="btn btn-danger"
-                    data-wishlist-title="@item.Title"
-                    data-action="wishlist-remove"
-                    title="Remove">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
-                    <path d="M10 11v6M14 11v6"></path>
-                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
-                </svg>
-            </button>
-        </form>
+        <button class="btn btn-danger"
+                data-wishlist-title="@item.Title"
+                data-action="wishlist-remove"
+                title="Remove">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
+                <path d="M10 11v6M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
+            </svg>
+        </button>
     </div>
 }
 
 <div class="add-form">
     <div class="add-form-title">Add to wishlist</div>
-    <form method="post" asp-page-handler="Add">
-        <div class="form-row">
-            <input type="text" asp-for="NewTitle" placeholder="Game title"/>
-            <select asp-for="NewPlatform" asp-items="Html.GetEnumSelectList<Platform>()"></select>
-            <button type="submit" class="btn btn-primary">+ Add</button>
-        </div>
-    </form>
+    <div class="form-row">
+        <input type="text" id="newTitle" placeholder="Game title"/>
+        <select id="newPlatform">
+            @foreach (var platform in Enum.GetValues<Platform>())
+            {
+                <option value="@platform">@platform</option>
+            }
+        </select>
+        <button type="button" class="btn btn-primary" id="addWishlistBtn">+ Add</button>
+    </div>
 </div>

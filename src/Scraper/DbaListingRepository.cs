@@ -8,7 +8,7 @@ public class DbaListingRepository : IListingRepository
 {
     private readonly HttpClient _httpClient;
     private readonly ISeenListingsRepository _seenListings;
-    private const int ScrapeDelayMs = 300;
+    private const int ScrapeDelayMs = 250;
     
     public DbaListingRepository(HttpClient httpClient, ISeenListingsRepository seenListings)
     {
@@ -26,7 +26,7 @@ public class DbaListingRepository : IListingRepository
         {
             var url = $"https://www.dba.dk/recommerce/forsale/search?games_group={MapPlatformId(platform)}&product_category=2.93.3905.64&page={page}&sort=PUBLISHED_DESC";
             var html = await _httpClient.GetStringAsync(url);
-        
+    
             var document = new HtmlDocument();
             document.LoadHtml(html);
 
@@ -38,17 +38,17 @@ public class DbaListingRepository : IListingRepository
                 stopPaging = true;
                 break;
             }
-        
+    
             var pageIds = nodes
                 .Select(n => n.GetAttributeValue("href", "").Split('/')[^1])
                 .Where(id => int.TryParse(id, out _))
                 .Select(int.Parse)
                 .Distinct()
                 .ToList();
-
+            Console.WriteLine($"Page {page} for {platform}: {pageIds.Count} IDs, first: {pageIds.FirstOrDefault()}, seen check: {pageIds.Any(id => _seenListings.Contains(id, platform))}");
             foreach (var id in pageIds)
             {
-                if (_seenListings.Contains(id))
+                if (_seenListings.Contains(id, platform))
                 {
                     stopPaging = true;
                     break;
@@ -74,8 +74,8 @@ public class DbaListingRepository : IListingRepository
             }
             await Task.Delay(ScrapeDelayMs);
         }
-        
-        _seenListings.AddRange(newIds);
+
+        _seenListings.AddRange(newIds, platform);
         return listings;
     }
 
@@ -192,4 +192,24 @@ public class DbaListingRepository : IListingRepository
         Platform.DS => 7,
         _ => throw new Exception($"Unknown platform id {platform}")
     };
+    
+    public async Task<ListingStatus> CheckStatus(int id)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"https://www.dba.dk/recommerce/forsale/item/{id}");
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return ListingStatus.Removed;
+
+            var html = await response.Content.ReadAsStringAsync();
+            if (html.Contains("\"disposed\":true"))
+                return ListingStatus.Sold;
+
+            return ListingStatus.Active;
+        }
+        catch
+        {
+            return ListingStatus.Unknown;
+        }
+    }
 }

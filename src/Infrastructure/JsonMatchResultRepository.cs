@@ -79,4 +79,15 @@ public class JsonMatchResultRepository : IMatchResultRepository
             m.FoundAt >= cutoff).ToList();
         File.WriteAllText(_filePath, JsonSerializer.Serialize(cleaned));
     }
+    public void UpdateStatus(int listingId, ListingStatus status)
+    {
+        var all = GetAll().ToList();
+        var match = all.FirstOrDefault(m => m.ListingId == listingId);
+        if (match != null)
+        {
+            match.Status = status;
+            match.StatusCheckedAt = DateTime.Now;
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(all));
+        }
+    }
 }

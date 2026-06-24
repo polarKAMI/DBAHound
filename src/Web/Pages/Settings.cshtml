@@ -54,6 +54,10 @@
                 <option value="6">Saturday</option>
             </select>
         </div>
+        <div class="settings-row">
+            <label class="settings-label">Status check interval (hours)</label>
+            <input type="number" asp-for="Settings.StatusCheckIntervalHours" class="settings-input" min="1" max="24"/>
+        </div>
     </div>
 
     <div class="settings-section">
@@ -166,7 +170,8 @@
             notificationProvider: document.querySelector('[name="Settings.NotificationProvider"]').value,
             pushoverToken: document.querySelector('[name="Settings.PushoverToken"]').value,
             pushoverUserKey: document.querySelector('[name="Settings.PushoverUserKey"]').value,
-            ntfyUrl: document.querySelector('[name="Settings.NtfyUrl"]').value
+            ntfyUrl: document.querySelector('[name="Settings.NtfyUrl"]').value,
+            statusCheckIntervalHours: parseInt(document.querySelector('[name="Settings.StatusCheckIntervalHours"]').value)
         };
 
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

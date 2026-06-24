@@ -9,5 +9,5 @@ public interface IMatchResultRepository
     void ToggleFavourite(int listingId);
     void Restore(int  listingId);
     void Cleanup(int keepDays);
-
+    void UpdateStatus(int listingId, ListingStatus status);
 }

@@ -10,7 +10,6 @@
     <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(Context).RequestToken"/>
 </head>
 <body>
-<script src="~/js/site.js" asp-append-version="true"></script>
 <nav class="topnav">
     <a class="topnav-logo" asp-area="" asp-page="/Index">
         <img src="~/images/logo.png" alt="DBAHound" class="logo-img"/>
@@ -27,12 +26,11 @@
     @RenderBody()
 </main>
 @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
-
+<script src="~/js/site.js" asp-append-version="true"></script>
 <script>
     document.querySelectorAll('.topnav-link').forEach(link => {
         if (link.getAttribute('href') === window.location.pathname)
             link.classList.add('active');
     });
 </script>
+</body>

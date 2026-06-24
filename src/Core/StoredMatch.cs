@@ -13,5 +13,6 @@ public class StoredMatch
     public bool IsDismissed { get; set; }
     public string? ImageUrl { get; set; }
     public string? Platform { get; set; }
-    
+    public ListingStatus Status { get; set; } = ListingStatus.Active;
+    public DateTime? StatusCheckedAt { get; set; }
 }
